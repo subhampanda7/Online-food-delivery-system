@@ -22,11 +22,19 @@ public class Bill {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer billId;
-	private LocalDateTime billdate;
+	
+	private LocalDateTime billDate;
+	
 	private Integer totalItem;
+	
 	private Double totalCost;
+	
 	 
 	@OneToOne
 	@JoinColumn(name = "orderId")
 	private OrderDetails orderDetails;
+	
+	
+	
+	
 }
