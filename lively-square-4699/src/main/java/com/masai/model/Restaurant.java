@@ -2,13 +2,7 @@ package com.masai.model;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,12 +20,15 @@ public class Restaurant {
 	private String restaurantName;
 	private String managerName;
 	private String contactNumber;
-	
+
+
 	@ManyToMany
 	private List<Item> items;
 	
 	@OneToOne
 	@JoinColumn(name = "addressId")
 	private Address address;
+
+
 
 }
