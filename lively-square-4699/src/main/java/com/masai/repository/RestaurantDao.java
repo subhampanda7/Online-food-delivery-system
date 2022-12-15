@@ -1,3 +1,4 @@
+
 package com.masai.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,3 +10,4 @@ import com.masai.model.Restaurant;
 public interface RestaurantDao extends JpaRepository<Restaurant, Integer>{
     public Restaurant findByContactNumber(String contactNumber);
 }
+

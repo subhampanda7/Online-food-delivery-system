@@ -1,3 +1,4 @@
+
 package com.masai.model;
 
 import java.util.List;
