@@ -11,15 +11,20 @@ import java.util.List;
 @Service
 public class IRestaurantServiceImpl implements IRestaurantService{
 
+    @Autowired
+    private RestaurantDao restaurantDao;
+
     @Override
     public Restaurant addRestaurant(Restaurant res) throws RestaurantException {
 
-        return null;
+        Restaurant existingCustomer= restaurantDao.findRestaurantByContactNumber(res.getContactNumber());
+        return restaurantDao.save(res);
     }
 
     @Override
-    public Restaurant updateRestaurant(Restaurant res) throws RestaurantException {
-        return null;
+    public Restaurant updateRestaurant(Restaurant res, int key) throws RestaurantException {
+
+       return null;
     }
 
     @Override
@@ -28,8 +33,8 @@ public class IRestaurantServiceImpl implements IRestaurantService{
     }
 
     @Override
-    public Restaurant viewRestaurant(Restaurant res) throws RestaurantException {
-        return null;
+    public Restaurant viewRestaurant(String key) throws RestaurantException {
+    return null;
     }
 
     @Override

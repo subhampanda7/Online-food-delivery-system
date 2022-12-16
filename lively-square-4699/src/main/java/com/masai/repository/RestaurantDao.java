@@ -7,5 +7,5 @@ import com.masai.model.Restaurant;
 
 @Repository
 public interface RestaurantDao extends JpaRepository<Restaurant, Integer>{
-    public Restaurant findByContactNumber(String contactNumber);
+    public Restaurant findRestaurantByContactNumber(String ContactNumber);
 }
