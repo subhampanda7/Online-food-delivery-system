@@ -46,6 +46,7 @@ public class CustomerController {
 	public ResponseEntity<Customer> removeCustomerHandler(@PathVariable("id") String customerId) throws CustomerException {
 		
 		Customer deletedCustomer = customerService.removeCustomer(customerId);
+		
 		return new ResponseEntity<Customer>(deletedCustomer, HttpStatus.OK);
 		
 	}
@@ -54,6 +55,7 @@ public class CustomerController {
 	public ResponseEntity<Customer> viewCustomer(@PathVariable("id") String customerId)throws CustomerException {
 		
 		Customer viewedcustomer = customerService.viewCustomer(customerId);
+
 		return new ResponseEntity<Customer>(viewedcustomer, HttpStatus.FOUND);
 		
 	}
