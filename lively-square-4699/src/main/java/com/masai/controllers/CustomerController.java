@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.masai.exceptions.CustomerException;
@@ -20,12 +20,13 @@ import com.masai.service.CustomerService;
 
 
 @RestController
-//@RequestMapping("/customerservice")
 public class CustomerController {
 	
 	@Autowired
 	private CustomerService customerService;
 	
+	
+	//Verified
 	@PostMapping("/customer")
 	public ResponseEntity<Customer> addCustomerHandler(@Valid @RequestBody Customer customer)throws CustomerException {
 
@@ -34,25 +35,31 @@ public class CustomerController {
 		
 	}
 	
+	
+	//Verified
 	@PutMapping("/customer")
-	public ResponseEntity<Customer> updateCustomerHandler(@Valid @RequestBody Customer customer)throws CustomerException {
+	public ResponseEntity<Customer> updateCustomerHandler(@Valid @RequestBody Customer customer, @RequestParam(required=false) String key)throws CustomerException {
 		
-		Customer updatedCustomer = customerService.addCustomer(customer);
-		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
+		Customer updatedCustomer = customerService.updateCustomer(customer,key);
+		return new ResponseEntity<Customer>(updatedCustomer, HttpStatus.OK);
 		
 	}
 
+	//Verified -> log out
 	@DeleteMapping("/customer/{id}")
-	public ResponseEntity<Customer> removeCustomerHandler(@PathVariable("id") String customerId) throws CustomerException {
+	public ResponseEntity<Customer> removeCustomerHandler(@PathVariable("id") Integer customerId, @RequestParam(required=false) String key) throws CustomerException {
 		
-		Customer deletedCustomer = customerService.removeCustomer(customerId);
+
+		Customer deletedCustomer = customerService.removeCustomer(customerId,key);
+
 		
+
 		return new ResponseEntity<Customer>(deletedCustomer, HttpStatus.OK);
 		
 	}
 	
 	@GetMapping("/customer/{id}")
-	public ResponseEntity<Customer> viewCustomer(@PathVariable("id") String customerId)throws CustomerException {
+	public ResponseEntity<Customer> viewCustomer(@PathVariable("id") Integer customerId)throws CustomerException {
 		
 		Customer viewedcustomer = customerService.viewCustomer(customerId);
 
