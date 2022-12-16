@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,10 +29,10 @@ public class Item {
 	private Integer quantity;
 	private Double cost;
 	
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "items")
+	@ManyToMany(mappedBy = "items",fetch=FetchType.EAGER)
 	private List<Restaurant> restaurants;
 	
-	@OneToOne
+	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "categoryId")
 	private Category category;
 }

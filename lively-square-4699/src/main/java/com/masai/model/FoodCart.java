@@ -3,6 +3,7 @@ package com.masai.model;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,11 +25,11 @@ public class FoodCart {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer cartId;
 	
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER)
 	@JoinColumn(name = "itemId")
 	private List<Item> items;
 	
-	@OneToOne
+	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "customerId")
 	private Customer customer;
 

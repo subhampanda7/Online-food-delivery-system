@@ -21,18 +21,21 @@ public class CustomerServiceImpl implements CustomerService{
 	@Autowired
 	private SessionDao sessionDao;
 
+	//Verified fully
 	@Override
 	public Customer addCustomer(Customer customer) throws CustomerException {
 		
 		Customer existingCustomer = customerDao.findByMobileNumber(customer.getMobileNumber());
 		
 		if(existingCustomer != null) {
-			throw new CustomerException("Customer Already registere with mobile number " + customer.getMobileNumber());
+			throw new CustomerException("Customer Already registered with mobile number " + customer.getMobileNumber());
 		}
 		return customerDao.save(customer);
 		
 	}
 
+	
+	//Verified fully
 	@Override
 	public Customer updateCustomer(Customer customer, String key) throws CustomerException {
 
@@ -54,7 +57,7 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	
-	//Verified- log out required, current session data not removed
+	//Verified fully
 	@Override
 	public Customer removeCustomer(Integer customerId, String key) throws CustomerException {
 		
@@ -74,21 +77,20 @@ public class CustomerServiceImpl implements CustomerService{
 		if(customer.getCustomerId() == loggedInUser.getUserId()) {
 			
 			customerDao.delete(customer);
-//			sessionDao.delete(loggedInUser);
+			sessionDao.delete(loggedInUser);
 			return customer;
 		}else
 			throw new CustomerException("Customer doesn't exist with customer Id: " + customerId);
 		
-		
-		
 	}
 
+	//Verified fully
 	@Override
 	public Customer viewCustomer(Integer customerId) throws CustomerException {
 		
 		Optional<Customer> foundCustomer = customerDao.findById(customerId);
 		
-		if(foundCustomer != null) {
+		if(foundCustomer.isPresent()) {
 			
 			return foundCustomer.get();
 			

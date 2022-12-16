@@ -1,4 +1,4 @@
-package com.masai.controllers;
+package com.masai.controller;
 
 import javax.validation.Valid;
 

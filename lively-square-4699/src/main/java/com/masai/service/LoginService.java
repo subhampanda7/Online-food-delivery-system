@@ -1,6 +1,7 @@
-package com.masai.model;
+package com.masai.service;
 
 import com.masai.exceptions.LoginException;
+import com.masai.model.LoginDTO;
 
 public interface LoginService {
 	

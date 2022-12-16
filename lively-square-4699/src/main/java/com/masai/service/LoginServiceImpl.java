@@ -1,6 +1,7 @@
 package com.masai.service;
 
 import java.time.LocalDateTime;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import com.masai.exceptions.LoginException;
 import com.masai.model.CurrentUserSession;
 import com.masai.model.Customer;
 import com.masai.model.LoginDTO;
-import com.masai.model.LoginService;
 import com.masai.repository.CustomerDao;
 import com.masai.repository.SessionDao;
 
@@ -25,6 +25,8 @@ public class LoginServiceImpl implements LoginService{
 	@Autowired
 	private SessionDao sessionDao;
 
+	
+	//Verified fully
 	@Override
 	public String loginIntoAccount(LoginDTO loginDto) throws LoginException {
 		
@@ -57,6 +59,8 @@ public class LoginServiceImpl implements LoginService{
 		
 	}
 
+	
+	//Verified
 	@Override
 	public String logoutFromAccount(String key) throws LoginException {
 		
@@ -64,7 +68,7 @@ public class LoginServiceImpl implements LoginService{
 		
 		if(validCustomerSession == null) {
 			
-			throw new LoginException("User Not Lopgged In with this number");
+			throw new LoginException("User Not Logged In with this key "+ key);
 			
 		}
 		sessionDao.delete(validCustomerSession);
