@@ -1,41 +1,98 @@
 package com.masai.service;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.masai.exceptions.CategoryException;
 import com.masai.model.Category;
-import com.masai.model.FoodCart;
-import com.masai.model.Item;
+import com.masai.repository.CategoryDao;
 
-public class CategoryServiceImpl implements CartService{
+@Service
+public class CategoryServiceImpl implements CategoryService{
+	
+	@Autowired
+	private CategoryDao catgegoryDao;
 
 	@Override
-	public FoodCart addCategory(Category cat) {
+	public Category addCategory(Category cat) throws CategoryException{
 		// TODO Auto-generated method stub
 		
+		Category category  =catgegoryDao.save(cat);
 		
-		return null;
+		if(category!=null) {
+			return category;
+		}
+		else {
+			throw new CategoryException("Category not add.....");
+		}
+		
+		
 	}
 
 	@Override
-	public FoodCart increaseQuantity(FoodCart cart, Item item, Integer quantity) {
+	public Category updateCategory(Category cat) throws CategoryException{
 		// TODO Auto-generated method stub
-		return null;
+		
+		Optional<Category> category =catgegoryDao.findById(cat.getCategoryId());
+		
+		if(category.isPresent()) {
+			return catgegoryDao.save(cat);
+		}
+		else {
+			throw new CategoryException("category not found....");
+		}
 	}
 
 	@Override
-	public FoodCart reduceQuantity(FoodCart cart, Item item, Integer quantiaty) {
+	public Category removeCategory(Category cat) throws CategoryException{
 		// TODO Auto-generated method stub
-		return null;
+		Optional<Category> category =catgegoryDao.findById(cat.getCategoryId());
+		
+		if(category.isPresent()) {
+			 catgegoryDao.delete(cat);
+			 
+			 return cat;
+
+		}
+		else {
+			throw new CategoryException("category not found....");
+		}
+//		return null;
 	}
 
 	@Override
-	public FoodCart removeItem(FoodCart cart, Item item) {
+	public Category viewCategory(Category cat) throws CategoryException{
 		// TODO Auto-generated method stub
-		return null;
+		
+		Optional<Category> category =catgegoryDao.findById(cat.getCategoryId());
+		
+		if(category.isPresent()) {
+			return category.get();
+		}
+		else {
+			throw new CategoryException("category not found....");
+		}
+		
+		
 	}
 
 	@Override
-	public FoodCart clearCart(FoodCart cart) {
+	public List<Category> viewAllCategory() throws CategoryException{
 		// TODO Auto-generated method stub
-		return null;
+		List<Category> lists=catgegoryDao.findAll();
+		
+		
+		if(lists.size()>0) {
+			return lists;
+		}
+		else {
+			throw new CategoryException("Category is empty.....");
+		}
 	}
+
+	
 
 }
