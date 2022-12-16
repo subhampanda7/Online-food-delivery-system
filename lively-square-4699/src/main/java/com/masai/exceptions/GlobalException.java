@@ -26,9 +26,9 @@ public class GlobalException {
 		
 	}
 	
-	//No handler found exception(any invalid URI)
-	@ExceptionHandler(NoHandlerFoundException.class)
-	public ResponseEntity<MyErrorDetail> notFoundHandler(NoHandlerFoundException se, WebRequest wr){
+	//Exception for Login
+	@ExceptionHandler(LoginException.class)
+	public ResponseEntity<MyErrorDetail> notFoundHandler(LoginException se, WebRequest wr){
 		
 		MyErrorDetail detail = new MyErrorDetail();
 		detail.setTimeStamp(LocalDateTime.now());

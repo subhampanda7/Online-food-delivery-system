@@ -28,29 +28,26 @@ import lombok.NoArgsConstructor;
 public class Customer {
 	
 	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(name = "customer_id")
-	private String customerId;
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
-//	private Integer customerId;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer customerId;
 	
-	@NotNull(message="First name could not be empty")
+//	@NotNull(message="First name could not be empty")
 	private String firstName;
 	
 	private String lastName;
 	
-	@Min(value=18, message="Age should be above 18")
+//	@Min(value=18, message="Age should be above 18")
 	private Integer age;
 	
 	private String gender;
 	
-	@Size(min=10, max=13)
+//	@Size(min=10, max=13)
 	private String mobileNumber;
 	
-	@Email
+//	@Email
 	private String email;
+	
+	private String password;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "addressId")

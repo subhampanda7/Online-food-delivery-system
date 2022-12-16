@@ -14,9 +14,11 @@ import com.masai.model.Customer;
 public interface CustomerDao extends JpaRepository<Customer, Integer>{
 
 //	@Query(value = "select * from customer c where c.customer_id=:customerId")
-	public Customer findByCustomerId(String customerId);
+	public Customer findByCustomerId(Integer customerId);
 
 	public List<Customer> findByEmail(String email);
+
+	public Customer findByMobileNumber(String mobileNo);
 
 }
 
