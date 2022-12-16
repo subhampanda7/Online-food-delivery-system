@@ -22,7 +22,7 @@
 		    <groupId>io.springfox</groupId>
 		    <artifactId>springfox-boot-starter</artifactId>
 		    <version>3.0.0</version>
-		</dependency>
+		</dependency> 
 
 	<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 	<dependency>
@@ -31,6 +31,7 @@
 	    <version>1.18.24</version><!--$NO-MVN-MAN-VER$-->
 	    <scope>provided</scope>
 	</dependency>
+	
 	<!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui 
 	<dependency>
 	 <groupId>org.springdoc</groupId>

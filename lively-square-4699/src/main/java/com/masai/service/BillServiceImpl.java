@@ -21,6 +21,7 @@ public class BillServiceImpl implements BillService{
 		
 		if(bill != null) {
 			return billDao.save(bill);
+			
 		} else {
 			throw new BillException("Enter correct details");
 		}
