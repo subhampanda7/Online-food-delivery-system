@@ -49,7 +49,11 @@ public class CustomerController {
 	@DeleteMapping("/customer/{id}")
 	public ResponseEntity<Customer> removeCustomerHandler(@PathVariable("id") Integer customerId, @RequestParam(required=false) String key) throws CustomerException {
 		
+
 		Customer deletedCustomer = customerService.removeCustomer(customerId,key);
+
+		
+
 		return new ResponseEntity<Customer>(deletedCustomer, HttpStatus.OK);
 		
 	}
@@ -58,6 +62,7 @@ public class CustomerController {
 	public ResponseEntity<Customer> viewCustomer(@PathVariable("id") Integer customerId)throws CustomerException {
 		
 		Customer viewedcustomer = customerService.viewCustomer(customerId);
+
 		return new ResponseEntity<Customer>(viewedcustomer, HttpStatus.FOUND);
 		
 	}
