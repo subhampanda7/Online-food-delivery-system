@@ -1,3 +1,4 @@
+
 package com.masai.repository;
 
 import java.util.List;
@@ -18,3 +19,4 @@ public interface CustomerDao extends JpaRepository<Customer, Integer>{
 	public List<Customer> findByEmail(String email);
 
 }
+
