@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.masai.exceptions.LoginException;
 import com.masai.model.LoginDTO;
-import com.masai.model.LoginService;
+import com.masai.service.LoginService;
 
 @RestController
 public class LoginController {

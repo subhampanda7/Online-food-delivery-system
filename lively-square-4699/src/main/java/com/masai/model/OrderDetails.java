@@ -3,6 +3,7 @@ package com.masai.model;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,7 +26,7 @@ public class OrderDetails {
 	private LocalDateTime orderDate;
 	private String orderStatus;
 	
-	@OneToOne
+	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "cartId")
 	private FoodCart foodCart;
 

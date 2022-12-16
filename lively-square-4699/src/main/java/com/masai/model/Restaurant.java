@@ -7,9 +7,12 @@ import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -23,10 +26,10 @@ public class Restaurant {
 	private String contactNumber;
 
 
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<Item> items;
 	
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name = "addressId")
 	private Address address;
 
