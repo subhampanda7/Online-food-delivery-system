@@ -59,6 +59,7 @@ public class CategoryController {
 		
 	}
 	
+	@GetMapping("/gets")
 	public ResponseEntity<List<Category>> viewAllCategoryHandler() throws CategoryException{
 		
 		List<Category> lists = categoryService.viewAllCategory();
