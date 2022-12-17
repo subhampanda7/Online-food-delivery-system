@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,12 +27,11 @@ public class FoodCart {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer cartId;
 	
-	@OneToMany(fetch=FetchType.EAGER)
-	@JoinColumn(name = "itemId")
-	private List<Item> items;
+//	@OneToMany
+//	private List<Item> items;
 	
-	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name = "customerId")
+	@OneToOne
+	@JsonIgnore
 	private Customer customer;
 
 }

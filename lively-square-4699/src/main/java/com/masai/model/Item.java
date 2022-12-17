@@ -1,5 +1,7 @@
 package com.masai.model;
 
+import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -9,9 +11,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,13 +30,12 @@ public class Item {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer itemId;
 	private String itemName;
-	private Integer quantity;
 	private Double cost;
 	
-	@ManyToMany(mappedBy = "items",fetch=FetchType.EAGER)
-	private List<Restaurant> restaurants;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Restaurant restaurant;
 	
-	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name = "categoryId")
+	@ManyToOne
 	private Category category;
 }
