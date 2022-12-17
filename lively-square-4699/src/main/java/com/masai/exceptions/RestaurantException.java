@@ -1,6 +1,6 @@
 package com.masai.exceptions;
 
-public class RestaurantException extends  Exception{
+public class RestaurantException extends RuntimeException{
     public RestaurantException() {
     }
 
