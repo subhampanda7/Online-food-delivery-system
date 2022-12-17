@@ -74,6 +74,18 @@ public class GlobalException {
 		return new ResponseEntity<MyErrorDetail>(detail, HttpStatus.BAD_REQUEST);
 	}
 	
+	//Exception Handling For Restaurant
+		@ExceptionHandler(RestaurantException.class)
+		public ResponseEntity<MyErrorDetail> studentEx(RestaurantException se, WebRequest wr){
+			
+			MyErrorDetail detail = new MyErrorDetail();
+			detail.setTimeStamp(LocalDateTime.now());
+			detail.setMessage(se.getMessage());
+			detail.setDetails(wr.getDescription(false));
+			
+			return new ResponseEntity<MyErrorDetail>(detail, HttpStatus.BAD_REQUEST);
+		}
+	
 	
 	
 	
