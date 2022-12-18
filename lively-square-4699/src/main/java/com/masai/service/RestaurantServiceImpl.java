@@ -4,119 +4,125 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.masai.dto.RestaurantAddDTO;
 import com.masai.dto.RestaurantDTO;
 import com.masai.exceptions.RestaurantException;
 import com.masai.model.CurrentUserSession;
 import com.masai.model.Restaurant;
-import com.masai.repository.ItemDao;
-import com.masai.repository.RestaurantDao;
-import com.masai.repository.SessionDao;
+import com.masai.repository.AddressRepo;
+import com.masai.repository.ItemRepo;
+import com.masai.repository.RestaurantRepo;
+import com.masai.repository.SessionRepo;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService{
 	
 	@Autowired
-	private RestaurantDao restaurantDao;
+	private AddressRepo ar;
 	
 	@Autowired
-	private ItemDao itemDao;
+	private RestaurantRepo rr;
 	
 	@Autowired
-	private SessionDao sessionDao;
+	private ItemRepo ir;
+	
+	@Autowired
+	private SessionRepo sessionrepo;
 	
 	@Autowired
 	private ModelMapper modelMapper;
 	
-	//Verified fully
 	@Override
-	public Restaurant addRestaurant(RestaurantDTO resdto) throws RestaurantException {
+	public Restaurant addRestaurant(RestaurantAddDTO resDto) throws RestaurantException {
 		
+		Restaurant restaurant = rr.findByContactNumber(resDto.getContactNumber());
 		
-		Restaurant restaurant = restaurantDao.findByContactNumber(resdto.getContactNumber());
-		
-		
+		if(restaurant == null) {
+			
+			restaurant = rr.findByEmail(resDto.getEmail());
 			
 			if(restaurant == null) {
 				
-				Restaurant rest  = this.modelMapper.map(resdto, Restaurant.class);
+				Restaurant rest  = this.modelMapper.map(resDto, Restaurant.class);
 				
-				return restaurantDao.save(rest);
+				return rr.save(rest);
 				
 			}else {
 				
-				throw new RestaurantException("Mobile already exists..");
+				throw new RestaurantException("Email already exists");
 				
 			}
+			
+		}else {
+			
+			throw new RestaurantException("Mobile already exists");
+			
+		}
+			
 		
 	}
 
 	
-	//verified fully
 	@Override
-	public Restaurant updateRestaurant(RestaurantDTO resdto, String key) throws RestaurantException {
+	public Restaurant updateRestaurant(RestaurantAddDTO resDto, String key) throws RestaurantException {
 		
-		
-		CurrentUserSession curr = sessionDao.findByUuid(key);
+		CurrentUserSession curr = sessionrepo.findByUuid(key);
 		
 		if(curr == null) throw new RestaurantException("No Restaurant Logged in with this key");
 		
 		if(curr.getRole().equalsIgnoreCase("customer")) throw new RestaurantException("You are not authorized");
 		
-		if(resdto.getRestaurantId() == curr.getUserId()) {
+		if(resDto.getRestaurantId() == curr.getUserId()) {
+			Restaurant restaurant = rr.findById(resDto.getRestaurantId())
+				.orElseThrow(() -> new RestaurantException("No such restaurant exists"));
 			
-			Restaurant restaurant = restaurantDao.findById(resdto.getRestaurantId())
-				.orElseThrow(() -> new RestaurantException("No such restaurant exists..."));
+			restaurant = this.modelMapper.map(resDto, Restaurant.class);
 			
-			restaurant = this.modelMapper.map(resdto, Restaurant.class);
-			
-			return restaurantDao.save(restaurant);
+			return rr.save(restaurant);
 		}else {
 			
-			throw new RestaurantException("Enter Authorised Restaurant Id");
+			throw new RestaurantException("Enter Authorised Restaurant Id..");
 			
 		}
 		
 	}
 
-	//verified fully
+	
 	@Override
-	public Restaurant removeRestaurant(Integer id, String key) throws RestaurantException {
+	public Restaurant removeRestaurant(Integer resId, String key) throws RestaurantException {
 		
-		CurrentUserSession curr = sessionDao.findByUuid(key);
+		CurrentUserSession curr = sessionrepo.findByUuid(key);
 		
 		if(curr == null) throw new RestaurantException("No Restaurant Logged in with this key");
 		
 		if(curr.getRole().equalsIgnoreCase("customer")) throw new RestaurantException("You are not authorized");
 		
-		if(id == curr.getUserId()) {
-			Restaurant restaurant = restaurantDao.findById(id)
+		if(resId == curr.getUserId()) {
+			Restaurant restaurant = rr.findById(resId)
 				.orElseThrow(() -> new RestaurantException("No such restaurant exists"));
 			
-			restaurantDao.delete(restaurant);
+			rr.delete(restaurant);
 		
 			return restaurant;
 		
 		}else {
 			
-			throw new RestaurantException("Enter authorised restaurant id");
+			throw new RestaurantException("Enter Authorised Restaurant Id");
 			
 		}
-		
+
 	}
 
-	//verified fully
+	
 	@Override
-	public RestaurantDTO viewRestaurant(Integer id) throws RestaurantException {
+	public RestaurantDTO viewRestaurant(Integer resId) throws RestaurantException {
 		
-		Restaurant restaurant = restaurantDao.findById(id)
-				.orElseThrow(() -> new RestaurantException("No such restaurant exists..."));
+		Restaurant restaurant = rr.findById(resId)
+				.orElseThrow(() -> new RestaurantException("No such restaurant exists"));
 			
 		return this.modelMapper.map(restaurant, RestaurantDTO.class);
-		
+			
 	}
-	
-	
-	
 	
 	
 }

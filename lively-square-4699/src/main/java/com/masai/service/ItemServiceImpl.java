@@ -2,93 +2,93 @@ package com.masai.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.masai.dto.ItemDTO;
 import com.masai.dto.RestaurantDTO;
+import com.masai.exceptions.CategoryException;
 import com.masai.exceptions.ItemException;
 import com.masai.exceptions.RestaurantException;
+import com.masai.model.Category;
 import com.masai.model.CurrentUserSession;
 import com.masai.model.Item;
 import com.masai.model.Restaurant;
-import com.masai.repository.CategoryDao;
-import com.masai.repository.ItemDao;
-import com.masai.repository.RestaurantDao;
-import com.masai.repository.SessionDao;
+import com.masai.repository.CategoryRepo;
+import com.masai.repository.ItemRepo;
+import com.masai.repository.RestaurantRepo;
+import com.masai.repository.SessionRepo;
 
 @Service
-public class ItemServiceImpl implements ItemService{
-	
-	@Autowired
-	private ItemDao itemDao;
+public class ItemServiceImpl implements ItemService {
 
 	@Autowired
-	private RestaurantDao restaurantDao;
+	private ItemRepo itemRepo;
 
 	@Autowired
-	private SessionDao sessionDao;
-	
+	private RestaurantRepo rr;
+
 	@Autowired
-	private CategoryDao categoryDao;
+	private SessionRepo sessionrepo;
+
+	@Autowired
+	private CategoryRepo categoryrepo;
+
 	
-	
-	//Verified fully
 	@Override
 	public Item addItem(ItemDTO itemdto, String key) throws ItemException, RestaurantException {
-		
-		CurrentUserSession curr = sessionDao.findByUuid(key);
+
+		CurrentUserSession curr = sessionrepo.findByUuid(key);
 
 		if (curr == null)
-			throw new RestaurantException("Please enter the correct restaurant key");
+			throw new RestaurantException("No restaurant Logged in with this key");
 
 		if (curr.getRole().equalsIgnoreCase("customer"))
-			throw new RestaurantException("Customer is not authorized to add item");
+			throw new RestaurantException("You are not authorized");
 
-		Restaurant restaurant = restaurantDao.findById(curr.getUserId())
-				.orElseThrow(() -> new RestaurantException("No such restaurant present"));
+		Restaurant restaurant = rr.findById(curr.getUserId())
+				.orElseThrow(() -> new RestaurantException("Invalid item id"));
 
-		List<Item> items = restaurant.getItems();
+		List<Item> items = restaurant.getItemList();
 
 		Item item = new Item();
 		item.setItemName(itemdto.getItemName());
 		item.setCost(itemdto.getCost());
 		item.setCategory(null);
 		item.setRestaurant(restaurant);
-			
 
-		for (Item iterator_item : items) {
+		for (Item itm : items) {
 
-			if (iterator_item.equals(item))
-				throw new ItemException("Item already present");
+			if (itm.equals(item))
+				throw new ItemException("Item is already Present");
 
 		}
 
 		items.add(item);
 
-		restaurant.setItems(items);
+		restaurant.setItemList(items);
 
-		return itemDao.save(item);
-		
+		return itemRepo.save(item);
+
 	}
 
 	
-	//Verified fully
 	@Override
 	public Item updateItem(ItemDTO itemdto, String key) throws ItemException, RestaurantException {
 
-		CurrentUserSession curr = sessionDao.findByUuid(key);
+		CurrentUserSession curr = sessionrepo.findByUuid(key);
 
 		if (curr == null)
-			throw new RestaurantException("Please enter the correct restaurant key");
+			throw new RestaurantException("No restaurant Logged in with this key");
 
 		if (curr.getRole().equalsIgnoreCase("customer"))
-			throw new RestaurantException("Customer is not authorized to update item");
+			throw new RestaurantException("You are not authorized");
 
-		Restaurant restaurant = restaurantDao.findById(curr.getUserId()).orElseThrow(() -> new RestaurantException(""));
+		Restaurant restaurant = rr.findById(curr.getUserId()).orElseThrow(() -> new RestaurantException(""));
 
-		List<Item> items = restaurant.getItems();
+		List<Item> items = restaurant.getItemList();
 
 		Item item = new Item();
 		item.setItemId(itemdto.getItemId());
@@ -102,53 +102,30 @@ public class ItemServiceImpl implements ItemService{
 				itm.setItemName(itemdto.getItemName());
 				itm.setCost(itemdto.getCost());
 
-				return itemDao.save(itm);
+				return itemRepo.save(itm);
 			}
 
 		}
 
-		throw new ItemException("No such item is present");
+		throw new ItemException("Item is not Present");
 
 	}
+	
 
-	//Verified fully
-	@Override
-	public ItemDTO viewItem(Integer itemId) throws ItemException {
-
-		Item item = itemDao.findById(itemId).orElseThrow(() -> new ItemException("No such item present with this id"));
-
-		ItemDTO idto = new ItemDTO();
-		idto.setItemId(item.getItemId());
-		idto.setItemName(item.getItemName());
-		idto.setCost(item.getCost());
-
-		RestaurantDTO rdto = new RestaurantDTO();
-
-		rdto.setRestaurantName(item.getRestaurant().getRestaurantName());
-		rdto.setContactNumber(item.getRestaurant().getContactNumber());
-		rdto.setAddress(item.getRestaurant().getAddress());
-
-		idto.setRestDTO(rdto);
-
-		return idto;
-
-	}
-
-	//Verified fully
 	@Override
 	public Item removeItem(Integer itemId, String key) throws ItemException, RestaurantException {
 
-		CurrentUserSession curr = sessionDao.findByUuid(key);
+		CurrentUserSession curr = sessionrepo.findByUuid(key);
 
 		if (curr == null)
-			throw new RestaurantException("Please enter the correct restaurant key");
+			throw new RestaurantException("No restaurant Logged in with this key");
 
 		if (curr.getRole().equalsIgnoreCase("customer"))
-			throw new RestaurantException("Customer is not authorized to update item");
+			throw new RestaurantException("You are not authorized");
 
-		Restaurant restaurant = restaurantDao.findById(curr.getUserId()).orElseThrow(() -> new RestaurantException("No such item is present"));
+		Restaurant restaurant = rr.findById(curr.getUserId()).orElseThrow(() -> new RestaurantException(""));
 
-		List<Item> items = restaurant.getItems();
+		List<Item> items = restaurant.getItemList();
 
 		for (Item itm : items) {
 
@@ -156,9 +133,9 @@ public class ItemServiceImpl implements ItemService{
 
 				items.remove(itm);
 
-				itemDao.delete(itm);
+				itemRepo.delete(itm);
 
-				restaurantDao.save(restaurant);
+				rr.save(restaurant);
 
 				return itm;
 
@@ -166,37 +143,35 @@ public class ItemServiceImpl implements ItemService{
 
 		}
 
-		throw new ItemException("No such item is present with this id");
+		throw new ItemException("Item does not exist with this id");
 
 	}
 
-	
-	//Verified fully
 	@Override
 	public List<ItemDTO> viewAllItems(String key) throws ItemException,RestaurantException {
 	   
-		CurrentUserSession curr = sessionDao.findByUuid(key);
+		CurrentUserSession curr = sessionrepo.findByUuid(key);
 
 		if (curr == null)
-			throw new RestaurantException("Please enter the correct restaurant key");
+			throw new RestaurantException("No restaurant Logged in with this key");
 
 		if (curr.getRole().equalsIgnoreCase("customer"))
-			throw new RestaurantException("Customer is not authorized to update item");
+			throw new RestaurantException("You are not authorized");
 
-		Restaurant restaurant = restaurantDao.findById(curr.getUserId()).orElseThrow(() -> new RestaurantException(""));
+		Restaurant restaurant = rr.findById(curr.getUserId()).orElseThrow(() -> new RestaurantException(""));
 		
 		
-		List<Item> items = itemDao.findAll();
+		List<Item> items = itemRepo.findAll();
 		
 		
-		if(items.isEmpty()) throw new ItemException("No item is present");
+		if(items.isEmpty()) throw new ItemException("No Items Added");
 	    List<ItemDTO> itemsdto = new ArrayList<>();
 	    
-	    for(Item iterItem : items ) {
+	    for(Item i : items ) {
 	    	ItemDTO idto = new ItemDTO();
-	    	idto.setCost(iterItem.getCost());
-	    	idto.setItemId(iterItem.getItemId());
-	    	idto.setItemName(iterItem.getItemName());
+	    	idto.setCost(i.getCost());
+	    	idto.setItemId(i.getItemId());
+	    	idto.setItemName(i.getItemName());
 	    	
 	    	itemsdto.add(idto);
 	    }
@@ -204,83 +179,5 @@ public class ItemServiceImpl implements ItemService{
 	    
 	    return itemsdto;
 	}
-	
-//
-//	@Override
-//	public Item addItemToCategoryByName(Integer itemId, String categoryName, String key)
-//			throws ItemException, CategoryException, RestaurantException {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public List<ItemDTO> viewAllItemsByCategory(Integer categoryId) throws CategoryException {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
 
-	@Override
-	public List<ItemDTO> viewAllItemsByRestaurant(Integer restaurantId) throws RestaurantException {
-
-		Restaurant restaurant = restaurantDao.findById(restaurantId)
-				.orElseThrow(() -> new RestaurantException("No such restaurant found with this id"));
-
-		List<Item> items = restaurant.getItems();
-
-		List<ItemDTO> idtos = new ArrayList<>();
-
-		for (Item item : items) {
-
-			ItemDTO idto = new ItemDTO();
-			idto.setItemId(item.getItemId());
-			idto.setItemName(item.getItemName());
-			idto.setCost(item.getCost());
-
-			RestaurantDTO rdto = new RestaurantDTO();
-
-			rdto.setRestaurantName(item.getRestaurant().getRestaurantName());
-			rdto.setContactNumber(item.getRestaurant().getContactNumber());
-			rdto.setAddress(item.getRestaurant().getAddress());
-
-			idto.setRestDTO(rdto);
-
-			idtos.add(idto);
-		}
-
-		return idtos;
-
-	}
-
-
-	@Override
-	public List<ItemDTO> viewAllItemsByName(String name) throws ItemException {
-
-		List<Item> items = itemDao.findByItemNameContaining(name);
-
-		System.out.println(items);
-
-		List<ItemDTO> idtos = new ArrayList<>();
-
-		for (Item item : items) {
-
-			ItemDTO idto = new ItemDTO();
-			idto.setItemId(item.getItemId());
-			idto.setItemName(item.getItemName());
-			idto.setCost(item.getCost());
-
-			RestaurantDTO rdto = new RestaurantDTO();
-
-			rdto.setRestaurantName(item.getRestaurant().getRestaurantName());
-			rdto.setContactNumber(item.getRestaurant().getContactNumber());
-			rdto.setAddress(item.getRestaurant().getAddress());
-
-			idto.setRestDTO(rdto);
-
-			idtos.add(idto);
-		}
-
-		return idtos;
-	}
-	
-	
 }

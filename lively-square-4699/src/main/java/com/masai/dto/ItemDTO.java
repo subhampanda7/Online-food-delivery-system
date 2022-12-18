@@ -1,5 +1,10 @@
 package com.masai.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.URL;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -11,16 +16,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ItemDTO {
 	
-private Integer itemId;
 	
-//	@NotBlank(message = "Item Name is Mandatory")
+	private Integer itemId;
+	
+	@NotBlank(message = "Item name is mandatory")
 	private String itemName;
 	
-//	@NotNull
+	@NotNull
 	private Double cost;
 	
 	@JsonIgnore
 	private RestaurantDTO restDTO;
 	
-
 }
