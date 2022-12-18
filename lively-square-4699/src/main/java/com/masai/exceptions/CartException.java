@@ -1,12 +1,12 @@
 package com.masai.exceptions;
 
-public class FoodCartException extends Exception{
+public class CartException extends RuntimeException{
 	
-	public FoodCartException() {
+	public CartException() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public FoodCartException(String message) {
+	public CartException(String message) {
 		// TODO Auto-generated constructor stub
 		super(message);
 	}

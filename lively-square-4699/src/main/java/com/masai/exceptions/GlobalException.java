@@ -8,7 +8,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
 public class GlobalException {
@@ -85,6 +84,33 @@ public class GlobalException {
 			
 			return new ResponseEntity<MyErrorDetail>(detail, HttpStatus.BAD_REQUEST);
 		}
+		
+		//Exception Handling For item
+		@ExceptionHandler(ItemException.class)
+		public ResponseEntity<MyErrorDetail> itemEx(ItemException se, WebRequest wr){
+			
+			MyErrorDetail detail = new MyErrorDetail();
+			detail.setTimeStamp(LocalDateTime.now());
+			detail.setMessage(se.getMessage());
+			detail.setDetails(wr.getDescription(false));
+			
+			return new ResponseEntity<MyErrorDetail>(detail, HttpStatus.BAD_REQUEST);
+		}
+		
+		//Exception Handling For cart
+		@ExceptionHandler(CartException.class)
+		public ResponseEntity<MyErrorDetail> cartEx(CartException se, WebRequest wr){
+			
+			MyErrorDetail detail = new MyErrorDetail();
+			detail.setTimeStamp(LocalDateTime.now());
+			detail.setMessage(se.getMessage());
+			detail.setDetails(wr.getDescription(false));
+			
+			return new ResponseEntity<MyErrorDetail>(detail, HttpStatus.BAD_REQUEST);
+		}
+		
+		
+		
 	
 	
 	

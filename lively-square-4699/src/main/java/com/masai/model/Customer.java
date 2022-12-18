@@ -55,4 +55,7 @@ public class Customer {
 	@JoinColumn(name = "addressId")
 	private Address address;
 	
+	@OneToOne(cascade = CascadeType.ALL)
+	private FoodCart foodCart;
+	
 }
