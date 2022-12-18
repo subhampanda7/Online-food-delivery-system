@@ -12,25 +12,28 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class FoodCart {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer cartId;
-	
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<FoodCartItems> itemList;
-	
+
 	@OneToOne
 	@JsonIgnore
 	private Customer customer;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<FoodCartItems> itemList;
+
+	@Override
+	public String toString() {
+		return "FoodCart [cartId=" + cartId + ", itemList=" + itemList + "]";
+	}
 
 }

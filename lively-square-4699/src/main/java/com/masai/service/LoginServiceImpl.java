@@ -1,131 +1,126 @@
 package com.masai.service;
 
 import java.time.LocalDateTime;
-
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.masai.dto.LoginDTO;
 import com.masai.exceptions.LoginException;
 import com.masai.model.CurrentUserSession;
 import com.masai.model.Customer;
-import com.masai.model.LoginDTO;
 import com.masai.model.Restaurant;
-import com.masai.repository.CustomerDao;
-import com.masai.repository.RestaurantDao;
-import com.masai.repository.SessionDao;
+import com.masai.repository.CustomerRepo;
+import com.masai.repository.RestaurantRepo;
+import com.masai.repository.SessionRepo;
 
 import net.bytebuddy.utility.RandomString;
 
 @Service
 public class LoginServiceImpl implements LoginService{
-	
-	@Autowired
-	private CustomerDao customerDao;
-	
-	@Autowired
-	private SessionDao sessionDao;
-	
-	@Autowired
-	private RestaurantDao restaurantDao;
 
+	@Autowired
+	private CustomerRepo cr;
 	
-	//Verified fully
+	@Autowired
+	private SessionRepo sr;
+	
+	@Autowired
+	private RestaurantRepo rr;
+	
 	@Override
-	public String loginIntoAccount(LoginDTO loginDto) throws LoginException {
+	public String logIntoAccount(LoginDTO dto)throws LoginException{
 		
-		if(loginDto.getRole().equalsIgnoreCase("customer")) {
+		//Customer
+		if(dto.getRole().equalsIgnoreCase("customer")) {
 			
-			//Customer Login
-			
-			Customer existingCustomer = customerDao.findByMobileNumber(loginDto.getMobileNo());
+			Customer existingCustomer= cr.findByMobileNumber(dto.getMobileNo());
 			
 			if(existingCustomer == null) {
 				
 				throw new LoginException("Please Enter a valid mobile number");
+				
 			}
 			
-			Optional<CurrentUserSession> validCustomerSessionOpt =  sessionDao.findById(existingCustomer.getCustomerId());
+			Optional<CurrentUserSession> validCustomerSessionOpt =  sr.findById(existingCustomer.getCustomerId());
 			
 			if(validCustomerSessionOpt.isPresent()) {
 				
-				throw new LoginException("User already logged in with this mobile number");
+				throw new LoginException("User already Logged In with this number");
+				
 			}
 			
-			if(existingCustomer.getPassword().equals(loginDto.getPassword())) {
+			if(existingCustomer.getPassword().equals(dto.getPassword())) {
 				
-				String key = RandomString.make(6);
+				String key= RandomString.make(4);
+			
+				CurrentUserSession currentUserSession = new CurrentUserSession(existingCustomer.getCustomerId(),dto.getRole(),key,LocalDateTime.now());
 				
-				CurrentUserSession currentUserSession = new CurrentUserSession(existingCustomer.getCustomerId(),loginDto.getRole(),key,LocalDateTime.now());
-				
-				sessionDao.save(currentUserSession);
-				
+				sr.save(currentUserSession);
+	
 				return currentUserSession.toString();
-				
-			} else
-				throw new LoginException("Please enter valid passowrd");
+			}
+			else
+				throw new LoginException("Please Enter a valid password");
 			
-		} else if(loginDto.getRole().equalsIgnoreCase("restaurant")) {
+		}else if(dto.getRole().equalsIgnoreCase("restaurant")){
 			
-			//Restaurant Login 
-			
-			Restaurant existingRestaurant= restaurantDao.findByContactNumber(loginDto.getMobileNo());
+			//Restaurant
+			Restaurant existingRestaurant= rr.findByContactNumber(dto.getMobileNo());
 			
 			if(existingRestaurant == null) {
 				
-				throw new LoginException("Please enter a valid mobile number");
+				throw new LoginException("Please Enter a valid mobile number");
 				
 			}
 			
-			Optional<CurrentUserSession> validRestaurantSessionOpt =  sessionDao.findById(existingRestaurant.getRestaurantId());
+			Optional<CurrentUserSession> validCustomerSessionOpt =  sr.findById(existingRestaurant.getRestaurantId());
 			
-			if(validRestaurantSessionOpt.isPresent()) {
+			if(validCustomerSessionOpt.isPresent()) {
 				
 				throw new LoginException("Restaurant already Logged In with this number");
 				
 			}
 			
-			if(existingRestaurant.getPassword().equals(loginDto.getPassword())) {
+			if(existingRestaurant.getPassword().equals(dto.getPassword())) {
 				
-				String key= RandomString.make(6);
+				String key= RandomString.make(4);
 			
-				CurrentUserSession currentUserSession = new CurrentUserSession(existingRestaurant.getRestaurantId(),loginDto.getRole(),key,LocalDateTime.now());
+				CurrentUserSession currentUserSession = new CurrentUserSession(existingRestaurant.getRestaurantId(),dto.getRole(),key,LocalDateTime.now());
 				
-				sessionDao.save(currentUserSession);
+				sr.save(currentUserSession);
 	
 				return currentUserSession.toString();
 			}
 			else
-				throw new LoginException("Please enter a valid password");
+				throw new LoginException("Please Enter a valid password");
 			
-			
-			
-		} else {
+		}else {
 			
 			throw new LoginException("Please Enter a valid role");
+			
 		}
-		
-		
 		
 		
 	}
 
-	
-	//Verified
+
 	@Override
-	public String logoutFromAccount(String key) throws LoginException {
+	public String logOutFromAccount(String key)throws LoginException {
 		
-		CurrentUserSession validCustomerSession = sessionDao.findByUuid(key);
+		CurrentUserSession validCustomerSession = sr.findByUuid(key);
 		
 		if(validCustomerSession == null) {
-			
-			throw new LoginException("User Not Logged In with this key "+ key);
+			throw new LoginException("User Not Logged In with this number");
 			
 		}
-		sessionDao.delete(validCustomerSession);
 		
-		return "Logged out successfully";
+		sr.delete(validCustomerSession);
+		
+		
+		return "Logged Out !";
+		
 		
 	}
 

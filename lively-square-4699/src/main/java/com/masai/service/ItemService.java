@@ -10,22 +10,16 @@ import com.masai.model.Item;
 
 public interface ItemService {
 	
+	//Verified
 	public Item addItem(ItemDTO itemdto, String key) throws ItemException, RestaurantException;
 	
+	//Verified
 	public Item updateItem(ItemDTO itemdto, String key) throws ItemException, RestaurantException;
 	
-	public ItemDTO viewItem(Integer itemId) throws ItemException;
-	
+	//Verified
 	public List<ItemDTO> viewAllItems(String key) throws ItemException,RestaurantException;
 	
+	//Verified
 	public Item removeItem(Integer itemId, String key) throws ItemException, RestaurantException;
-	
-//	public Item addItemToCategoryByName(Integer itemId, String categoryName, String key) throws ItemException, CategoryException, RestaurantException;
-	
-//	public List<ItemDTO> viewAllItemsByCategory(Integer categoryId) throws CategoryException;
-	
-	public List<ItemDTO> viewAllItemsByRestaurant(Integer restaurantId) throws RestaurantException;
-	
-	public List<ItemDTO> viewAllItemsByName(String name)throws ItemException;
 
 }

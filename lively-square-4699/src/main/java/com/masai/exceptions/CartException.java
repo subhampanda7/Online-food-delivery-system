@@ -1,14 +1,16 @@
 package com.masai.exceptions;
 
-public class CartException extends RuntimeException{
-	
+
+public class CartException extends Exception {
+
 	public CartException() {
-		// TODO Auto-generated constructor stub
+		super();
+
 	}
-	
+
 	public CartException(String message) {
-		// TODO Auto-generated constructor stub
 		super(message);
+
 	}
 
 }

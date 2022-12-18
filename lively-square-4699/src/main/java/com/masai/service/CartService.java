@@ -7,16 +7,10 @@ import com.masai.model.FoodCart;
 
 public interface CartService {
 	
+	//Verified
 	public FoodCart addItemToCart(Integer itemId, String key) throws RestaurantException, ItemException;
-
-	public FoodCart increaseQuantity(Integer itemId, Integer quantity, String key) throws RestaurantException, ItemException, CartException;
-
-	public FoodCart reduceQuantity(Integer itemId, Integer quantity, String key) throws RestaurantException, ItemException, CartException;
-
+	
+	//Verified
 	public FoodCart removeItem(Integer itemId, String key) throws RestaurantException, ItemException, CartException;
-
-	public String clearCart(String key) throws RestaurantException, CartException;
-	
-	
 
 }

@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.masai.model.FoodCart;
 
+
 @Repository
 public interface FoodCartDao extends JpaRepository<FoodCart, Integer>{
 
+	
 }

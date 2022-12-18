@@ -1,22 +1,26 @@
 package com.masai.service;
 
-import java.util.List;
+import org.springframework.stereotype.Repository;
 
+import com.masai.dto.CustAddDto;
+import com.masai.dto.CustomerDto;
+import com.masai.exceptions.AddressException;
 import com.masai.exceptions.CustomerException;
+import com.masai.model.Address;
 import com.masai.model.Customer;
-import com.masai.model.Restaurant;
 
+@Repository
 public interface CustomerService {
 	
-	public Customer addCustomer(Customer customer)throws CustomerException;
+	//verified
+	public Customer registerCustomer(CustAddDto customer) throws CustomerException;
 	
-	public Customer updateCustomer(Customer customer, String key)throws CustomerException;
+	//verified
+	public Customer updateCustomer(CustAddDto customer, String key) throws CustomerException;
 	
-	public Customer removeCustomer(Integer customerId, String key)throws CustomerException;
+	//verified
+	public String deleteCustomer(Integer customerId, String key) throws CustomerException;
 	
-	public Customer viewCustomer(Integer customerId)throws CustomerException;
-	
-	
-//	public List<Customer> viewAllCustomers(Restaurant restaurant)throws CustomerException,RestaurantException;
-
+	//verified
+	public CustomerDto addAddress(Integer customerId, Address add, String key) throws CustomerException, AddressException;
 }
