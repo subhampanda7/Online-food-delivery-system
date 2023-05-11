@@ -17,19 +17,34 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+	<!-- https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter -->
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-boot-starter</artifactId>
+		    <version>3.0.0</version>
+		</dependency>
+
 	<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 	<dependency>
 	    <groupId>org.projectlombok</groupId>
 	    <artifactId>lombok</artifactId>
-	    <version>1.18.24</version>
+	    <version>1.18.24</version><!--$NO-MVN-MAN-VER$-->
 	    <scope>provided</scope>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui -->
+	<!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui 
 	<dependency>
 	 <groupId>org.springdoc</groupId>
 	 <artifactId>springdoc-openapi-ui</artifactId>
 	 <version>1.6.13</version>
-	</dependency>
+	</dependency> -->
+	
+	<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		
+		
 
 
 		<dependency>
@@ -61,6 +76,8 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+
 	</dependencies>
 
 	<build>
